@@ -1,0 +1,39 @@
+{
+  "canisters": {
+    "whale_tracking": {
+      "type": "motoko",
+      "main": "backend/whale_tracking/main.mo"
+    },
+    "portfolio": {
+      "type": "motoko", 
+      "main": "backend/portfolio/main.mo"
+    },
+    "alpha_feed": {
+      "type": "motoko",
+      "main": "backend/alpha_feed/main.mo"
+    },
+    "mind_map": {
+      "type": "motoko",
+      "main": "backend/mind_map/main.mo"
+    },
+    "frontend": {
+      "type": "assets",
+      "source": ["frontend/out"],
+      "dependencies": ["whale_tracking", "portfolio", "alpha_feed", "mind_map"]
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "",
+      "args": ""
+    }
+  },
+  "dfx": "0.20.4",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+} 
