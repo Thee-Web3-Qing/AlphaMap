@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Ensure proper routing for app directory
+  trailingSlash: false,
+  // Disable static export for app router
+  output: undefined,
 };
 
 export default nextConfig;
