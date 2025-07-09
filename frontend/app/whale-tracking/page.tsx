@@ -9,39 +9,18 @@ import {
   Stack, 
   Grid,
   Avatar,
-  IconButton,
-  Tooltip,
   useTheme,
   useMediaQuery,
   Button,
   TextField,
-  InputAdornment,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  LinearProgress,
   Container
 } from "@mui/material";
 import { 
   Search,
-  FilterList,
   TrendingUp,
-  TrendingDown,
   Visibility,
   AccountBalance,
-  Psychology,
-  AccountTree,
-  Warning,
-  CheckCircle,
-  Error,
-  Info,
-  Star,
-  Speed,
-  Refresh
+  AccountTree
 } from "@mui/icons-material";
 
 // Jungle comic theme colors
@@ -146,7 +125,7 @@ const whaleStats = [
   { label: "Total Whales", value: "1,247", change: "+12", icon: <Visibility />, color: jungle.lightGreen },
   { label: "Active Today", value: "847", change: "+23", icon: <TrendingUp />, color: jungle.olive },
   { label: "Total Value", value: "$847M", change: "+8.4%", icon: <AccountBalance />, color: jungle.accent },
-  { label: "High Activity", value: "156", change: "+15", icon: <Speed />, color: jungle.olive }
+  { label: "High Activity", value: "156", change: "+15", icon: <TrendingUp />, color: jungle.olive }
 ];
 
 const recentMovements = [

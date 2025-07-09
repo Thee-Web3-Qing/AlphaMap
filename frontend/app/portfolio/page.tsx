@@ -9,43 +9,17 @@ import {
   Stack, 
   Grid,
   Avatar,
-  IconButton,
-  Tooltip,
   useTheme,
   useMediaQuery,
   Button,
-  LinearProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Divider,
   Container
 } from "@mui/material";
 import { 
   Add,
-  Refresh,
   TrendingUp,
-  TrendingDown,
-  AccountBalance,
-  Visibility,
-  Psychology,
-  AccountTree,
-  Warning,
-  CheckCircle,
-  Error,
-  Info,
-  Star,
-  Speed,
   AttachMoney,
   ShowChart,
-  PieChart,
-  Timeline,
-  SwapHoriz,
-  Analytics
+  Timeline
 } from "@mui/icons-material";
 
 // Jungle comic theme colors

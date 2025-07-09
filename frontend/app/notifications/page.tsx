@@ -13,7 +13,6 @@ import {
   useTheme,
   useMediaQuery,
   Container,
-  Divider,
   Badge,
   List,
   ListItem,
@@ -25,21 +24,15 @@ import {
 import { 
   Notifications,
   NotificationsActive,
-  NotificationsOff,
-  TrendingUp,
-  TrendingDown,
   AccountBalance,
   Psychology,
   AccountTree,
   Visibility,
-  Star,
   Warning,
   Info,
-  CheckCircle,
-  Error,
   Delete,
   MarkEmailRead,
-  FilterList
+  TrendingUp
 } from "@mui/icons-material";
 
 // Jungle comic theme colors

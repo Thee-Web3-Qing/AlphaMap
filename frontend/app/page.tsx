@@ -19,12 +19,8 @@ import {
   TrendingUp, 
   AccountBalance, 
   Psychology, 
-  RocketLaunch,
-  PlayArrow,
   AccountTree,
-  Star,
   Visibility,
-  Speed,
   Map
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
@@ -264,7 +260,6 @@ export default function Home() {
                   transition: 'all 0.3s ease'
                 }}
               >
-                <PlayArrow sx={{ mr: 1 }} />
                 Start Exploring
               </Button>
               <Button 

@@ -8,46 +8,14 @@ import {
   Stack, 
   Chip, 
   Avatar,
-  IconButton,
-  Tooltip,
   useTheme,
   useMediaQuery,
   Container,
-  Divider,
-  Button,
-  TextField,
-  Grid,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText
+  Button
 } from "@mui/material";
 import { 
-  AccountCircle,
   Edit,
-  Settings,
-  Security,
-  Notifications,
-  Language,
-  Palette,
-  Storage,
-  Speed,
-  TrendingUp,
-  Star,
-  Verified,
-  LocationOn,
-  Email,
-  Phone,
-  Link,
-  GitHub,
-  Twitter,
-  LinkedIn,
-  Save,
-  Cancel,
-  Visibility,
-  AccountBalance,
-  AccountTree
+  Settings
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 

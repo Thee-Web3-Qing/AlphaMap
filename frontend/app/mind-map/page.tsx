@@ -160,56 +160,6 @@ const mockMindMapData = {
   ]
 };
 
-const transactionHistory = [
-  {
-    id: 1,
-    from: "Sofia (Primary)",
-    to: "Base DEX",
-    amount: "100 ETH",
-    type: "Swap",
-    token: "ETH → BASE",
-    time: "2 hours ago",
-    value: "$350,000",
-    status: "completed"
-  },
-  {
-    id: 2,
-    from: "Sofia (Primary)", 
-    to: "Sofia (Secondary)",
-    amount: "50 ETH",
-    type: "Transfer",
-    token: "ETH",
-    time: "5 hours ago",
-    value: "$175,000",
-    status: "completed"
-  },
-  {
-    id: 3,
-    from: "Jacob (Unknown)",
-    to: "Ethereum DEX",
-    amount: "10 ETH",
-    type: "Swap",
-    token: "ETH → USDC",
-    time: "1 day ago",
-    value: "$35,000",
-    status: "completed"
-  },
-  {
-    id: 4,
-    from: "Whale_0x789",
-    to: "Base DEX",
-    amount: "500 ETH",
-    type: "Swap",
-    token: "ETH → BASE",
-    time: "15 minutes ago",
-    value: "$1,750,000",
-    status: "pending"
-  }
-];
-
-// Dynamically import react-force-graph for SSR compatibility
-const ForceGraph2D = dynamic(() => import('react-force-graph').then(mod => mod.ForceGraph2D), { ssr: false });
-
 export default function MindMapPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));

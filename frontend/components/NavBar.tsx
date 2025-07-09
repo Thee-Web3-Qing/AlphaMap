@@ -7,12 +7,6 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme, useMediaQuery, Badge, Avatar, Stack, Container, Divider } from "@mui/material";
 import { 
@@ -22,7 +16,6 @@ import {
   Psychology, 
   AccountTree,
   Notifications,
-  AccountCircle,
   Map,
   Menu,
   Close
