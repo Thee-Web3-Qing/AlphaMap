@@ -27,8 +27,8 @@ export default function PerformanceMonitor() {
         });
         
         // Send to analytics if available
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'page_performance', {
+        if (typeof (window as any).gtag === 'function') {
+          (window as any).gtag('event', 'page_performance', {
             load_time: loadTime,
             dom_content_loaded: domContentLoaded,
             first_paint: firstPaint,

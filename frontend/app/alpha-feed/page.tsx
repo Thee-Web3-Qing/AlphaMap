@@ -307,8 +307,7 @@ export default function AlphaFeedPage() {
                             fontFamily: comicFont,
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            fontFamily: comicFont
+                            whiteSpace: 'nowrap'
                           }}>
                             {post.author}
                           </Typography>
