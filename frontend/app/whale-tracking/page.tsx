@@ -9,10 +9,19 @@ import {
   Stack, 
   Grid,
   Avatar,
+  IconButton,
+  Tooltip,
   useTheme,
   useMediaQuery,
   Button,
   TextField,
+  InputAdornment,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
   Container
 } from "@mui/material";
 import { 
@@ -20,7 +29,10 @@ import {
   TrendingUp,
   Visibility,
   AccountBalance,
-  AccountTree
+  AccountTree,
+  FilterList,
+  Refresh,
+  TrendingDown
 } from "@mui/icons-material";
 
 // Jungle comic theme colors

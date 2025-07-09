@@ -19,7 +19,8 @@ import {
   ListItemAvatar,
   ListItemText,
   ListItemSecondaryAction,
-  Grid
+  Grid,
+  Divider
 } from "@mui/material";
 import { 
   Notifications,

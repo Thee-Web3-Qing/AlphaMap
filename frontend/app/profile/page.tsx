@@ -11,11 +11,16 @@ import {
   useTheme,
   useMediaQuery,
   Container,
-  Button
+  Button,
+  Grid
 } from "@mui/material";
 import { 
   Edit,
-  Settings
+  Settings,
+  AccountBalance,
+  TrendingUp,
+  Star,
+  Speed
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 

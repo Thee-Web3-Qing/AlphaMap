@@ -9,6 +9,8 @@ import {
   Stack, 
   Grid,
   Avatar,
+  IconButton,
+  Tooltip,
   useTheme,
   useMediaQuery,
   Button,
@@ -19,7 +21,10 @@ import {
   TrendingUp,
   AttachMoney,
   ShowChart,
-  Timeline
+  Timeline,
+  SwapHoriz,
+  Visibility,
+  Analytics
 } from "@mui/icons-material";
 
 // Jungle comic theme colors

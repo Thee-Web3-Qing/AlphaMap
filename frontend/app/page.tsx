@@ -21,7 +21,8 @@ import {
   Psychology, 
   AccountTree,
   Visibility,
-  Map
+  Map,
+  Star
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
@@ -104,7 +105,7 @@ const testimonials = [
   }
 ];
 
-export default function Home() {
+export default function HomePage() {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));

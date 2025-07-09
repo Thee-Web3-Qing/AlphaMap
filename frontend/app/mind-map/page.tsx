@@ -163,7 +163,7 @@ const mockMindMapData = {
 export default function MindMapPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [selectedNode, setSelectedNode] = React.useState<string | null>('sofia-primary');
+  const [selectedNode] = React.useState<string | null>('sofia-primary');
   const [isLoading, setIsLoading] = React.useState(true);
 
   // Simulate loading for better UX
