@@ -8,12 +8,9 @@ import {
   Chip, 
   Stack, 
   Avatar,
-  IconButton,
   Paper,
   LinearProgress,
   Badge,
-  Tooltip,
-  Fab,
   Button,
   Grid,
   useTheme,
@@ -23,8 +20,6 @@ import {
 import { 
   TrendingUp, 
   Psychology, 
-  Share, 
-  Bookmark,
   Bolt,
   LocalFireDepartment,
   Star,
@@ -111,7 +106,6 @@ const alphaOfTheDay = {
 };
 
 export default function AlphaFeedPage() {
-  const [selectedPost, setSelectedPost] = React.useState<number | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 

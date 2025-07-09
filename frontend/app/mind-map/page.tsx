@@ -1,52 +1,25 @@
 "use client";
 import * as React from "react";
-import Link from "next/link";
 import { 
   Box, 
   Typography, 
   Card, 
   CardContent, 
-  Chip, 
   Stack, 
-  Grid,
-  Avatar,
-  IconButton,
-  Tooltip,
   useTheme,
   useMediaQuery,
   Button,
-  Slider,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Switch,
-  FormControlLabel,
   Container
 } from "@mui/material";
 import { 
-  Warning,
   ZoomIn,
   ZoomOut,
-  Fullscreen,
   Refresh,
-  FilterList,
-  Settings,
-  PlayArrow,
-  Pause,
-  Speed,
   AccountTree,
-  Visibility,
-  TrendingUp,
-  AccountBalance,
-  Psychology,
   CenterFocusStrong,
   Share,
-  Download,
-  Link as LinkIcon
+  Download
 } from "@mui/icons-material";
-import dynamic from "next/dynamic";
-import { MindMapGraph } from "../../components/MindMapGraph";
 
 // Jungle comic theme colors
 const jungle = {
@@ -241,10 +214,6 @@ export default function MindMapPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedNode, setSelectedNode] = React.useState<string | null>('sofia-primary');
-  const [zoom, setZoom] = React.useState(1);
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const [showLabels, setShowLabels] = React.useState(true);
-  const [filterType, setFilterType] = React.useState('all');
   const [isLoading, setIsLoading] = React.useState(true);
 
   // Simulate loading for better UX
@@ -254,47 +223,6 @@ export default function MindMapPage() {
     }, 500);
     return () => clearTimeout(timer);
   }, []);
-
-  const handleNodeClick = (nodeId: string) => {
-    setSelectedNode(selectedNode === nodeId ? null : nodeId);
-  };
-
-  const getNodeColor = (type: string, relationship?: string) => {
-    switch (type) {
-      case 'whale':
-        if (relationship === 'Primary') return '#1976d2';
-        if (relationship === 'Secondary') return '#2e7d32';
-        return '#0288d1';
-      case 'protocol':
-        return '#388e3c';
-      case 'cex':
-        return '#d32f2f';
-      default:
-        return theme.palette.grey[500];
-    }
-  };
-
-  const getActivityColor = (activity: string) => {
-    switch (activity) {
-      case 'Very High': return '#2e7d32';
-      case 'High': return '#1976d2';
-      case 'Medium': return '#f57c00';
-      case 'Low': return '#757575';
-      default: return '#d32f2f';
-    }
-  };
-
-  const filteredNodes = mockMindMapData.nodes.filter(node => {
-    if (filterType === 'all') return true;
-    return node.type === filterType;
-  });
-
-  const mindMapStats = [
-    { label: "Total Nodes", value: mockMindMapData.nodes.length, change: "+10%", color: jungle.olive, icon: <AccountTree /> },
-    { label: "Total Connections", value: mockMindMapData.connections.length, change: "+5%", color: jungle.olive, icon: <LinkIcon /> },
-    { label: "Average Activity", value: "High", change: "+20%", color: jungle.olive, icon: <TrendingUp /> },
-    { label: "Total Value", value: "$12.5M", change: "+15%", color: jungle.olive, icon: <AccountBalance /> }
-  ];
 
   // Find the selected wallet node
   const selectedWallet = mockMindMapData.nodes.find(n => n.id === selectedNode);
