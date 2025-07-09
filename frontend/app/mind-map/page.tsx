@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import Link from "next/link";
 import { 
   Box, 
   Typography, 
@@ -7,27 +8,61 @@ import {
   CardContent, 
   Chip, 
   Stack, 
-  Paper,
   Grid,
   Avatar,
   IconButton,
   Tooltip,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  Button,
+  Slider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Switch,
+  FormControlLabel,
+  Container
 } from "@mui/material";
 import { 
-  AccountTree, 
-  Visibility, 
-  TrendingUp, 
   Warning,
-  Info,
   ZoomIn,
   ZoomOut,
   Fullscreen,
-  Refresh
+  Refresh,
+  FilterList,
+  Settings,
+  PlayArrow,
+  Pause,
+  Speed,
+  AccountTree,
+  Visibility,
+  TrendingUp,
+  AccountBalance,
+  Psychology,
+  CenterFocusStrong,
+  Share,
+  Download,
+  Link as LinkIcon
 } from "@mui/icons-material";
+import dynamic from "next/dynamic";
+import { MindMapGraph } from "../../components/MindMapGraph";
 
-// Mock mind map data
+// Jungle comic theme colors
+const jungle = {
+  darkGreen: "#184D27",
+  olive: "#6B8E23",
+  lightGreen: "#B7E4C7",
+  saddleBrown: "#8B5C2A",
+  goldenBrown: "#C6862A",
+  wheat: "#F5DEB3",
+  accent: "#FFD600",
+};
+
+// Optimized font stack for better performance and mobile compatibility
+const comicFont = `'Arial Black', 'Impact', 'Comic Sans MS', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+
+// Enhanced mock mind map data
 const mockMindMapData = {
   nodes: [
     {
@@ -40,7 +75,9 @@ const mockMindMapData = {
       avatar: "S",
       x: 400,
       y: 200,
-      connections: ["sofia-secondary", "base-dex", "cex-endpoint"]
+      connections: ["sofia-secondary", "base-dex", "cex-endpoint", "eth-dex"],
+      activity: "High",
+      lastTx: "2h ago"
     },
     {
       id: "sofia-secondary", 
@@ -52,7 +89,9 @@ const mockMindMapData = {
       avatar: "S",
       x: 600,
       y: 300,
-      connections: ["base-dex"]
+      connections: ["base-dex", "sofia-primary"],
+      activity: "Medium",
+      lastTx: "5h ago"
     },
     {
       id: "jacob-unknown",
@@ -64,7 +103,9 @@ const mockMindMapData = {
       avatar: "J",
       x: 200,
       y: 400,
-      connections: ["eth-dex"]
+      connections: ["eth-dex", "base-dex"],
+      activity: "Low",
+      lastTx: "1d ago"
     },
     {
       id: "base-dex",
@@ -75,7 +116,9 @@ const mockMindMapData = {
       avatar: "🔄",
       x: 500,
       y: 150,
-      connections: ["sofia-primary", "sofia-secondary"]
+      connections: ["sofia-primary", "sofia-secondary", "jacob-unknown"],
+      activity: "Very High",
+      lastTx: "30m ago"
     },
     {
       id: "eth-dex",
@@ -86,7 +129,9 @@ const mockMindMapData = {
       avatar: "🔄",
       x: 100,
       y: 350,
-      connections: ["jacob-unknown"]
+      connections: ["jacob-unknown", "sofia-primary"],
+      activity: "High",
+      lastTx: "1h ago"
     },
     {
       id: "cex-endpoint",
@@ -97,15 +142,48 @@ const mockMindMapData = {
       avatar: "⚠️",
       x: 700,
       y: 100,
-      connections: ["sofia-primary"]
+      connections: ["sofia-primary"],
+      activity: "Unknown",
+      lastTx: "N/A"
+    },
+    {
+      id: "whale-0x789",
+      name: "Whale_0x789",
+      type: "whale",
+      balance: "2500 ETH",
+      value: "$8.75M",
+      relationship: "Primary",
+      avatar: "W",
+      x: 300,
+      y: 100,
+      connections: ["base-dex", "eth-dex"],
+      activity: "Very High",
+      lastTx: "15m ago"
+    },
+    {
+      id: "defi-protocol",
+      name: "DeFi Protocol",
+      type: "protocol",
+      protocol: "Aave V3",
+      volume: "$1.5M",
+      avatar: "🏦",
+      x: 800,
+      y: 400,
+      connections: ["sofia-secondary"],
+      activity: "Medium",
+      lastTx: "3h ago"
     }
   ],
   connections: [
-    { from: "sofia-primary", to: "sofia-secondary", amount: "50 ETH", type: "transfer" },
-    { from: "sofia-primary", to: "base-dex", amount: "100 ETH", type: "swap" },
-    { from: "sofia-secondary", to: "base-dex", amount: "25 ETH", type: "swap" },
-    { from: "jacob-unknown", to: "eth-dex", amount: "10 ETH", type: "swap" },
-    { from: "sofia-primary", to: "cex-endpoint", amount: "200 ETH", type: "withdrawal" }
+    { from: "sofia-primary", to: "sofia-secondary", amount: "50 ETH", type: "transfer", strength: 0.8 },
+    { from: "sofia-primary", to: "base-dex", amount: "100 ETH", type: "swap", strength: 0.9 },
+    { from: "sofia-secondary", to: "base-dex", amount: "25 ETH", type: "swap", strength: 0.6 },
+    { from: "jacob-unknown", to: "eth-dex", amount: "10 ETH", type: "swap", strength: 0.4 },
+    { from: "sofia-primary", to: "cex-endpoint", amount: "200 ETH", type: "withdrawal", strength: 0.7 },
+    { from: "whale-0x789", to: "base-dex", amount: "500 ETH", type: "swap", strength: 0.95 },
+    { from: "whale-0x789", to: "eth-dex", amount: "300 ETH", type: "swap", strength: 0.8 },
+    { from: "sofia-secondary", to: "defi-protocol", amount: "75 ETH", type: "deposit", strength: 0.5 },
+    { from: "jacob-unknown", to: "base-dex", amount: "5 ETH", type: "swap", strength: 0.3 }
   ]
 };
 
@@ -118,7 +196,8 @@ const transactionHistory = [
     type: "Swap",
     token: "ETH → BASE",
     time: "2 hours ago",
-    value: "$350,000"
+    value: "$350,000",
+    status: "completed"
   },
   {
     id: 2,
@@ -128,7 +207,8 @@ const transactionHistory = [
     type: "Transfer",
     token: "ETH",
     time: "5 hours ago",
-    value: "$175,000"
+    value: "$175,000",
+    status: "completed"
   },
   {
     id: 3,
@@ -138,15 +218,42 @@ const transactionHistory = [
     type: "Swap",
     token: "ETH → USDC",
     time: "1 day ago",
-    value: "$35,000"
+    value: "$35,000",
+    status: "completed"
+  },
+  {
+    id: 4,
+    from: "Whale_0x789",
+    to: "Base DEX",
+    amount: "500 ETH",
+    type: "Swap",
+    token: "ETH → BASE",
+    time: "15 minutes ago",
+    value: "$1,750,000",
+    status: "pending"
   }
 ];
+
+// Dynamically import react-force-graph for SSR compatibility
+const ForceGraph2D = dynamic(() => import('react-force-graph').then(mod => mod.ForceGraph2D), { ssr: false });
 
 export default function MindMapPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [selectedNode, setSelectedNode] = React.useState<string | null>(null);
+  const [selectedNode, setSelectedNode] = React.useState<string | null>('sofia-primary');
   const [zoom, setZoom] = React.useState(1);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [showLabels, setShowLabels] = React.useState(true);
+  const [filterType, setFilterType] = React.useState('all');
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  // Simulate loading for better UX
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleNodeClick = (nodeId: string) => {
     setSelectedNode(selectedNode === nodeId ? null : nodeId);
@@ -155,345 +262,332 @@ export default function MindMapPage() {
   const getNodeColor = (type: string, relationship?: string) => {
     switch (type) {
       case 'whale':
-        if (relationship === 'Primary') return theme.palette.primary.main;
-        if (relationship === 'Secondary') return theme.palette.secondary.main;
-        return theme.palette.info.main;
+        if (relationship === 'Primary') return '#1976d2';
+        if (relationship === 'Secondary') return '#2e7d32';
+        return '#0288d1';
       case 'protocol':
-        return theme.palette.success.main;
+        return '#388e3c';
       case 'cex':
-        return theme.palette.error.main;
+        return '#d32f2f';
       default:
         return theme.palette.grey[500];
     }
   };
 
+  const getActivityColor = (activity: string) => {
+    switch (activity) {
+      case 'Very High': return '#2e7d32';
+      case 'High': return '#1976d2';
+      case 'Medium': return '#f57c00';
+      case 'Low': return '#757575';
+      default: return '#d32f2f';
+    }
+  };
+
+  const filteredNodes = mockMindMapData.nodes.filter(node => {
+    if (filterType === 'all') return true;
+    return node.type === filterType;
+  });
+
+  const mindMapStats = [
+    { label: "Total Nodes", value: mockMindMapData.nodes.length, change: "+10%", color: jungle.olive, icon: <AccountTree /> },
+    { label: "Total Connections", value: mockMindMapData.connections.length, change: "+5%", color: jungle.olive, icon: <LinkIcon /> },
+    { label: "Average Activity", value: "High", change: "+20%", color: jungle.olive, icon: <TrendingUp /> },
+    { label: "Total Value", value: "$12.5M", change: "+15%", color: jungle.olive, icon: <AccountBalance /> }
+  ];
+
+  // Find the selected wallet node
+  const selectedWallet = mockMindMapData.nodes.find(n => n.id === selectedNode);
+
   return (
-    <Box sx={{ maxWidth: 1400, mx: "auto", mt: { xs: 2, md: 4 }, px: { xs: 1, md: 2 } }}>
-      {/* Header */}
-      <Box sx={{ mb: { xs: 3, md: 4 } }}>
-        <Typography 
-          variant={isMobile ? "h5" : "h4"} 
-          color="primary" 
-          fontWeight={700} 
-          gutterBottom
-        >
-          🧠 Mind Map Visualizer
-        </Typography>
-        <Typography 
-          variant={isMobile ? "body1" : "subtitle1"} 
-          color="text.secondary" 
-          gutterBottom
-        >
-          Interactive visualization of wallet relationships and transaction flows across multiple chains.
-        </Typography>
-      </Box>
+    <Box sx={{ 
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #2F4F2F 0%, #556B2F 50%, #8FBC8F 100%)',
+      position: 'relative',
+      overflow: 'hidden',
+      fontFamily: comicFont,
+      pt: { xs: 10, md: 12 }
+    }}>
+      {/* Divider/Shadow below navbar */}
+      <Box sx={{
+        position: 'fixed',
+        top: 64,
+        left: 0,
+        right: 0,
+        height: 16,
+        zIndex: 1200,
+        background: 'linear-gradient(to bottom, rgba(139,69,19,0.12), rgba(245,222,179,0))',
+        pointerEvents: 'none'
+      }} />
+      {/* Jungle Background Pattern */}
+      <Box sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: `
+          radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(34, 139, 34, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 40% 40%, rgba(65, 105, 225, 0.05) 0%, transparent 50%)
+        `,
+        pointerEvents: 'none'
+      }} />
 
-      {/* Controls */}
-      <Card sx={{ mb: 3, p: 2 }}>
-        <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
-          <Typography variant="subtitle2" fontWeight={600}>
-            Controls:
-          </Typography>
-          <Tooltip title="Zoom In">
-            <IconButton size="small" onClick={() => setZoom(Math.min(zoom + 0.1, 2))}>
-              <ZoomIn />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Zoom Out">
-            <IconButton size="small" onClick={() => setZoom(Math.max(zoom - 0.1, 0.5))}>
-              <ZoomOut />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Reset View">
-            <IconButton size="small" onClick={() => setZoom(1)}>
-              <Refresh />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Fullscreen">
-            <IconButton size="small">
-              <Fullscreen />
-            </IconButton>
-          </Tooltip>
-          <Chip label={`Zoom: ${Math.round(zoom * 100)}%`} size="small" color="info" />
-        </Stack>
-      </Card>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+        <Box sx={{ mt: { xs: 2, md: 4 }, mb: { xs: 3, md: 6 } }}>
+          {/* Header */}
+          <Box sx={{ mb: { xs: 3, md: 4 }, textAlign: 'center' }}>
+            <Typography 
+              variant="h3" 
+              sx={{ 
+                fontWeight: 700,
+                color: jungle.wheat,
+                textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                mb: 2,
+                fontFamily: comicFont,
+                fontSize: '3rem'
+              }}
+            >
+              🗺️ Mind Map Visualizer
+            </Typography>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                color: jungle.wheat,
+                opacity: 0.9,
+                textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                fontFamily: comicFont,
+                fontSize: '1.2rem'
+              }}
+            >
+              Visualize wallet relationships and flows!
+            </Typography>
+          </Box>
 
-      {/* Mind Map Visualization */}
-      <Grid container spacing={3}>
-        <Grid xs={12} lg={8}>
-          <Card sx={{ height: 600, position: 'relative', overflow: 'hidden' }}>
-            <CardContent sx={{ p: 0, height: '100%' }}>
-              {/* SVG Container for Mind Map */}
-              <Box 
-                sx={{ 
-                  width: '100%', 
-                  height: '100%', 
-                  bgcolor: 'grey.50',
-                  position: 'relative',
-                  transform: `scale(${zoom})`,
-                  transformOrigin: 'center center',
-                  transition: 'transform 0.3s ease'
-                }}
-              >
-                {/* Connection Lines */}
-                <svg 
-                  width="100%" 
-                  height="100%" 
-                  style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
-                >
-                  {mockMindMapData.connections.map((connection, index) => {
-                    const fromNode = mockMindMapData.nodes.find(n => n.id === connection.from);
-                    const toNode = mockMindMapData.nodes.find(n => n.id === connection.to);
-                    if (!fromNode || !toNode) return null;
-                    
-                    return (
-                      <g key={index}>
-                        <line
-                          x1={fromNode.x}
-                          y1={fromNode.y}
-                          x2={toNode.x}
-                          y2={toNode.y}
-                          stroke={connection.type === 'transfer' ? theme.palette.primary.main : 
-                                  connection.type === 'swap' ? theme.palette.success.main : 
-                                  theme.palette.warning.main}
-                          strokeWidth={2}
-                          strokeDasharray={connection.type === 'withdrawal' ? '5,5' : 'none'}
-                        />
-                        <circle
-                          cx={(fromNode.x + toNode.x) / 2}
-                          cy={(fromNode.y + toNode.y) / 2}
-                          r={4}
-                          fill={connection.type === 'transfer' ? theme.palette.primary.main : 
-                                connection.type === 'swap' ? theme.palette.success.main : 
-                                theme.palette.warning.main}
-                        />
-                      </g>
-                    );
-                  })}
-                </svg>
+          {/* Selected Wallet Name */}
+          {selectedWallet && (
+            <Box sx={{ textAlign: 'center', mb: 2 }}>
+              <Typography variant="h5" fontWeight={700} sx={{ color: '#8B4513', fontFamily: comicFont }}>
+                Wallet: {selectedWallet.name}
+              </Typography>
+            </Box>
+          )}
 
-                {/* Nodes */}
-                {mockMindMapData.nodes.map((node) => (
-                  <Box
-                    key={node.id}
-                    sx={{
-                      position: 'absolute',
-                      left: node.x - 30,
-                      top: node.y - 30,
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'scale(1.1)',
-                        zIndex: 10
-                      }
-                    }}
-                    onClick={() => handleNodeClick(node.id)}
-                  >
-                    <Card 
-                      sx={{ 
-                        width: 60,
-                        height: 60,
-                        borderRadius: '50%',
-                        bgcolor: getNodeColor(node.type, node.relationship),
-                        color: 'white',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: selectedNode === node.id ? '3px solid white' : 'none',
-                        boxShadow: selectedNode === node.id ? 4 : 2,
-                        position: 'relative'
-                      }}
-                    >
-                      <Typography variant="h6" fontWeight={600}>
-                        {node.avatar}
-                      </Typography>
-                    </Card>
-                    
-                    {/* Node Label */}
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        position: 'absolute',
-                        top: 70,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        whiteSpace: 'nowrap',
-                        bgcolor: 'rgba(255,255,255,0.9)',
-                        px: 1,
-                        py: 0.5,
-                        borderRadius: 1,
-                        fontSize: '0.7rem',
-                        fontWeight: 600
-                      }}
-                    >
-                      {node.name}
+          {/* Mind Map Visualization */}
+          <Card sx={{ 
+            background: 'rgba(245, 222, 179, 0.95)',
+            backdropFilter: 'blur(10px)',
+            border: '3px solid #8B4513',
+            borderRadius: 3,
+            mb: 3
+          }}>
+            <CardContent sx={{ p: 0 }}>
+              <Box sx={{ p: 3, borderBottom: '2px solid #8B4513' }}>
+                <Typography variant="h5" fontWeight={700} sx={{ color: '#8B4513', textAlign: 'center' }}>
+                  🗺️ Interactive Mind Map
+                </Typography>
+              </Box>
+              <Box sx={{ 
+                height: { xs: 400, md: 500 }, 
+                width: '100%',
+                position: 'relative',
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: 2,
+                m: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                gap: 2
+              }}>
+                {isLoading ? (
+                  <>
+                    <Box sx={{ 
+                      width: 80, 
+                      height: 80, 
+                      border: '4px solid #8B4513', 
+                      borderTop: '4px solid transparent',
+                      borderRadius: '50%',
+                      animation: 'spin 1s linear infinite',
+                      mb: 2
+                    }} />
+                    <Typography variant="h6" sx={{ color: '#8B4513', fontFamily: comicFont, textAlign: 'center' }}>
+                      Loading Mind Map...
                     </Typography>
-                  </Box>
-                ))}
+                  </>
+                ) : (
+                  <>
+                    <AccountTree sx={{ fontSize: 80, color: '#8B4513', opacity: 0.7 }} />
+                    <Typography variant="h5" sx={{ color: '#8B4513', fontFamily: comicFont, mb: 2, textAlign: 'center' }}>
+                      Mind Map Visualization Coming Soon!
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#556B2F', textAlign: 'center', fontFamily: comicFont }}>
+                      Interactive wallet relationship and transaction map will be available here soon.
+                    </Typography>
+                  </>
+                )}
               </Box>
             </CardContent>
           </Card>
-        </Grid>
 
-        {/* Sidebar */}
-        <Grid xs={12} lg={4}>
-          <Stack spacing={3}>
-            {/* Selected Node Details */}
-            {selectedNode && (
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" fontWeight={600} gutterBottom>
-                    Node Details
-                  </Typography>
-                  {(() => {
-                    const node = mockMindMapData.nodes.find(n => n.id === selectedNode);
-                    if (!node) return null;
-                    
-                    return (
-                      <Stack spacing={2}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                          <Avatar sx={{ bgcolor: getNodeColor(node.type, node.relationship) }}>
-                            {node.avatar}
-                          </Avatar>
-                          <Box>
-                            <Typography variant="subtitle1" fontWeight={600}>
-                              {node.name}
-                            </Typography>
-                            <Chip 
-                              label={node.type.toUpperCase()} 
-                              size="small" 
-                              color={node.type === 'whale' ? 'primary' : 
-                                     node.type === 'protocol' ? 'success' : 'error'}
-                            />
-                          </Box>
-                        </Box>
-                        
-                        {node.type === 'whale' && (
-                          <>
-                            <Typography variant="body2">
-                              <strong>Balance:</strong> {node.balance}
-                            </Typography>
-                            <Typography variant="body2">
-                              <strong>Value:</strong> {node.value}
-                            </Typography>
-                            <Typography variant="body2">
-                              <strong>Relationship:</strong> {node.relationship}
-                            </Typography>
-                          </>
-                        )}
-                        
-                        {node.type === 'protocol' && (
-                          <>
-                            <Typography variant="body2">
-                              <strong>Protocol:</strong> {node.protocol}
-                            </Typography>
-                            <Typography variant="body2">
-                              <strong>Volume:</strong> {node.volume}
-                            </Typography>
-                          </>
-                        )}
-                        
-                        {node.type === 'cex' && (
-                          <>
-                            <Typography variant="body2">
-                              <strong>Exchange:</strong> {node.exchange}
-                            </Typography>
-                            <Typography variant="body2" color="error.main">
-                              <strong>Status:</strong> {node.status}
-                            </Typography>
-                          </>
-                        )}
-                      </Stack>
-                    );
-                  })()}
-                </CardContent>
-              </Card>
-            )}
+          {/* Controls and Filters */}
+          <Card sx={{ 
+            background: 'rgba(245, 222, 179, 0.95)',
+            backdropFilter: 'blur(10px)',
+            border: '3px solid #8B4513',
+            borderRadius: 3,
+            mb: 3
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="h6" fontWeight={700} sx={{ color: '#8B4513', mb: 2, textAlign: 'center' }}>
+                🎛️ Map Controls
+              </Typography>
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="center" justifyContent="center">
+                <Button 
+                  variant="contained"
+                  startIcon={<ZoomIn />}
+                  sx={{ 
+                    fontFamily: comicFont,
+                    background: 'linear-gradient(135deg, #8B4513 0%, #D2691E 100%)',
+                    color: jungle.wheat,
+                    border: '3px solid #8B4513',
+                    borderRadius: 3,
+                    fontWeight: 700,
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #D2691E 0%, #8B4513 100%)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Zoom In
+                </Button>
+                <Button 
+                  variant="contained"
+                  startIcon={<ZoomOut />}
+                  sx={{ 
+                    fontFamily: comicFont,
+                    background: 'linear-gradient(135deg, #228B22 0%, #32CD32 100%)',
+                    color: jungle.wheat,
+                    border: '3px solid #8B4513',
+                    borderRadius: 3,
+                    fontWeight: 700,
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #32CD32 0%, #228B22 100%)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Zoom Out
+                </Button>
+                <Button 
+                  variant="contained"
+                  startIcon={<CenterFocusStrong />}
+                  sx={{ 
+                    fontFamily: comicFont,
+                    background: 'linear-gradient(135deg, #4169E1 0%, #87CEEB 100%)',
+                    color: jungle.wheat,
+                    border: '3px solid #8B4513',
+                    borderRadius: 3,
+                    fontWeight: 700,
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #87CEEB 0%, #4169E1 100%)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Reset View
+                </Button>
+                <Button 
+                  variant="contained"
+                  startIcon={<Refresh />}
+                  sx={{ 
+                    fontFamily: comicFont,
+                    background: 'linear-gradient(135deg, #FF6B35 0%, #F7931E 100%)',
+                    color: jungle.wheat,
+                    border: '3px solid #8B4513',
+                    borderRadius: 3,
+                    fontWeight: 700,
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #F7931E 0%, #FF6B35 100%)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Refresh Data
+                </Button>
+              </Stack>
+            </CardContent>
+          </Card>
 
-            {/* Transaction History */}
-            <Card>
-              <CardContent>
-                <Typography variant="h6" fontWeight={600} gutterBottom>
-                  Recent Transactions
-                </Typography>
-                <Stack spacing={2}>
-                  {transactionHistory.map((tx) => (
-                    <Box key={tx.id} sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
-                      <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Box>
-                          <Typography variant="body2" fontWeight={600}>
-                            {tx.from} → {tx.to}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {tx.amount} • {tx.token}
-                          </Typography>
-                        </Box>
-                        <Box textAlign="right">
-                          <Chip 
-                            label={tx.type} 
-                            size="small" 
-                            color={tx.type === 'Swap' ? 'success' : 'primary'}
-                          />
-                          <Typography variant="caption" display="block" color="text.secondary">
-                            {tx.time}
-                          </Typography>
-                        </Box>
-                      </Stack>
-                    </Box>
-                  ))}
-                </Stack>
-              </CardContent>
-            </Card>
-
-            {/* Legend */}
-            <Card>
-              <CardContent>
-                <Typography variant="h6" fontWeight={600} gutterBottom>
-                  Legend
-                </Typography>
-                <Stack spacing={1}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ width: 20, height: 20, borderRadius: '50%', bgcolor: 'primary.main' }} />
-                    <Typography variant="body2">Primary Whale</Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ width: 20, height: 20, borderRadius: '50%', bgcolor: 'secondary.main' }} />
-                    <Typography variant="body2">Secondary Whale</Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ width: 20, height: 20, borderRadius: '50%', bgcolor: 'info.main' }} />
-                    <Typography variant="body2">Unknown Whale</Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ width: 20, height: 20, borderRadius: '50%', bgcolor: 'success.main' }} />
-                    <Typography variant="body2">Protocol/DEX</Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ width: 20, height: 20, borderRadius: '50%', bgcolor: 'error.main' }} />
-                    <Typography variant="body2">CEX Endpoint</Typography>
-                  </Box>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Stack>
-        </Grid>
-      </Grid>
-
-      {/* CEX Warning */}
-      <Card sx={{ mt: 3, borderLeft: 6, borderColor: "error.main" }}>
-        <CardContent>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Warning color="error" />
-            <Typography variant="body1" fontWeight={600}>
-              CEX Endpoints are flagged as "Untrackable"
+          {/* Quick Actions */}
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant={isMobile ? "h6" : "h6"} fontWeight={600} gutterBottom sx={{ 
+              fontFamily: comicFont,
+              color: jungle.wheat,
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+            }}>
+              Quick Actions
             </Typography>
-          </Stack>
-          <Typography variant="body2" color="text.secondary" mt={1}>
-            Centralized exchange endpoints are flagged and not tracked further for privacy and transparency. 
-            Funds sent to CEX addresses cannot be traced beyond this point.
-          </Typography>
-        </CardContent>
-      </Card>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
+              <Button 
+                variant="contained"
+                size={isMobile ? "small" : "medium"}
+                startIcon={<AccountTree />}
+                sx={{ 
+                  fontFamily: comicFont,
+                  background: 'linear-gradient(135deg, #8B4513 0%, #D2691E 100%)',
+                  color: jungle.wheat,
+                  border: '3px solid #8B4513',
+                  borderRadius: 3,
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #D2691E 0%, #8B4513 100%)',
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                Create Map
+              </Button>
+              <Button 
+                variant="contained"
+                size={isMobile ? "small" : "medium"}
+                startIcon={<Share />}
+                sx={{ 
+                  fontFamily: comicFont,
+                  background: 'linear-gradient(135deg, #228B22 0%, #32CD32 100%)',
+                  color: jungle.wheat,
+                  border: '3px solid #8B4513',
+                  borderRadius: 3,
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #32CD32 0%, #228B22 100%)',
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                Share Map
+              </Button>
+              <Button 
+                variant="contained"
+                size={isMobile ? "small" : "medium"}
+                startIcon={<Download />}
+                sx={{ 
+                  fontFamily: comicFont,
+                  background: 'linear-gradient(135deg, #4169E1 0%, #87CEEB 100%)',
+                  color: jungle.wheat,
+                  border: '3px solid #8B4513',
+                  borderRadius: 3,
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #87CEEB 0%, #4169E1 100%)',
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                Export
+              </Button>
+            </Stack>
+          </Box>
+        </Box>
+      </Container>
     </Box>
   );
 } 
